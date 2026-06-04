@@ -12,7 +12,7 @@ const openai = new OpenAI({
 });
 
 module.exports = async (req, res) => {
-    // CORS headers for all responses
+    // 1. MUST handle OPTIONS immediately for CORS
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
