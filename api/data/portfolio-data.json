@@ -1,0 +1,61 @@
+{
+  "personalInfo": {
+    "name": "Fatimah Noman",
+    "title": "Full Stack Developer & AI Specialist",
+    "email": "fatimah.noman@example.com",
+    "github": "https://github.com/fatimahnoman",
+    "linkedin": "https://linkedin.com/in/fatimahnoman",
+    "location": "Karachi / Open to Relocation"
+  },
+  "about": "I am a Full Stack Developer passionate about building intelligent systems. I specialize in Agentic AI, leveraging LLMs to create autonomous workflows and highly performant full-stack web applications.",
+  "skills": [
+    {
+      "category": "AI & Agentic Systems",
+      "items": ["Agentic AI", "LLMs (Gemini, OpenAI)", "LangChain", "Vector Databases", "Prompt Engineering"]
+    },
+    {
+      "category": "Frontend",
+      "items": ["React", "Next.js", "TypeScript", "Tailwind CSS"]
+    },
+    {
+      "category": "Backend",
+      "items": ["Node.js", "Python", "FastAPI", "PostgreSQL", "REST APIs"]
+    }
+  ],
+  "projects": [
+    {
+      "title": "Agentic Health Assistant",
+      "description": "An autonomous AI agent designed for personalized health monitoring and recommendation.",
+      "techStack": ["Next.js", "Python (FastAPI)", "Gemini API", "LangChain"],
+      "features": [
+        "Autonomous agent loop for reasoning",
+        "Personalized meal planning based on real-time data",
+        "AI-driven workout recommendations",
+        "Agentic symptom analysis"
+      ],
+      "link": "https://github.com/fatimahnoman/agentic-health-assistant"
+    },
+    {
+      "title": "Full-Stack Intelligent Marketplace",
+      "description": "A high-performance e-commerce platform with integrated AI-based customer support.",
+      "techStack": ["React", "Node.js", "PostgreSQL", "OpenAI API"],
+      "features": [
+        "AI-powered customer support chat",
+        "Real-time inventory management",
+        "Secure Stripe integration"
+      ],
+      "link": "https://github.com/fatimahnoman/intelligent-marketplace"
+    }
+  ],
+  "education": [
+    {
+      "institution": "University of Tech",
+      "degree": "Bachelor of Science in Computer Science",
+      "year": "2023"
+    }
+  ],
+  "certifications": [
+    "AWS Certified Machine Learning - Specialty",
+    "Advanced Full Stack Development Certificate"
+  ]
+}
