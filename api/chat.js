@@ -3,7 +3,7 @@ const fs = require('fs');
 const path = require('path');
 
 // Read portfolio data
-const portfolioDataPath = path.join(process.cwd(), 'api', 'data', 'portfolio-data.json');
+const portfolioDataPath = path.join(__dirname, 'data', 'portfolio-data.json');
 const portfolioData = JSON.parse(fs.readFileSync(portfolioDataPath, 'utf8'));
 
 const openai = new OpenAI({

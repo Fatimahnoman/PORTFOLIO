@@ -379,6 +379,7 @@ window.submitGuess = function(event) {
                 timestamp: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
             });
         } catch(e) {
+            console.error("Chatbot Fetch Error:", e);
             messages.push({role: 'model', content: "Sorry, I couldn't connect to the server.", timestamp: ts});
         }
         const typing = document.getElementById('typing');
