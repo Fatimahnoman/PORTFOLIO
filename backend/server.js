@@ -18,11 +18,17 @@ const openai = new OpenAI({
 const app = express();
 
 // Middleware
-app.use(cors({
-    origin: 'https://fatimahnoman.github.io',
-    methods: ['GET', 'POST'],
-    credentials: true
-}));
+app.use((req, res, next) => {
+    res.setHeader('Access-Control-Allow-Origin', 'https://fatimahnoman.github.io');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    
+    // Handle preflight requests
+    if (req.method === 'OPTIONS') {
+        return res.status(200).end();
+    }
+    next();
+});
 // Parse URL-encoded bodies (as sent by HTML forms)
 app.use(bodyParser.urlencoded({ extended: true }));
 // Parse JSON bodies (as sent by API clients)
