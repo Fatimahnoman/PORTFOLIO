@@ -17,7 +17,7 @@ const openai = new OpenAI({
 
 const app = express();
 
-// Middleware
+// Middleware - Global CORS handler
 app.use((req, res, next) => {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
@@ -27,16 +27,16 @@ app.use((req, res, next) => {
     }
     next();
 });
-// Parse URL-encoded bodies (as sent by HTML forms)
+
+// Parse bodies
 app.use(bodyParser.urlencoded({ extended: true }));
-// Parse JSON bodies (as sent by API clients)
 app.use(bodyParser.json());
 
-// Serve static files from the root directory (so images like portfoliopic.png work)
-app.use(express.static(path.join(__dirname, '../')));
+// Main Router for /api
+const router = express.Router();
 
 // Chat Endpoint
-app.post('/api/chat', async (req, res) => {
+router.post('/chat', async (req, res) => {
     try {
         const { messages } = req.body;
         
@@ -81,7 +81,6 @@ app.post('/api/chat', async (req, res) => {
         });
 
         const rawContent = completion.choices[0].message.content;
-        // Strip potential markdown code blocks
         const cleanedContent = rawContent.replace(/```json/g, '').replace(/```/g, '');
         const responseObj = JSON.parse(cleanedContent);
         res.json({ role: "model", content: responseObj.answer, suggestions: responseObj.suggestions });
@@ -91,22 +90,8 @@ app.post('/api/chat', async (req, res) => {
     }
 });
 
-// Serve the work.html file on the root route
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, '../index.html'));
-});
-
-// Transporter configuration...
-const transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS
-    }
-});
-
-// Endpoint to handle form submissions
-app.post('/send', async (req, res) => {
+// Send Endpoint
+router.post('/send', async (req, res) => {
     const { name, email, message } = req.body;
 
     if (!name || !email || !message) {
@@ -115,7 +100,7 @@ app.post('/send', async (req, res) => {
 
     const mailOptions = {
         from: `"${name}" <${process.env.EMAIL_USER}>`,
-        to: process.env.EMAIL_USER, // Sending to yourself
+        to: process.env.EMAIL_USER,
         replyTo: email,
         subject: `New Portfolio Message from ${name}`,
         text: `You received a new message from your portfolio!\n\nName: ${name}\nEmail: ${email}\n\nMessage:\n${message}`,
@@ -138,6 +123,14 @@ app.post('/send', async (req, res) => {
         console.error('Error sending email:', error);
         res.status(500).json({ success: false, error: error.message });
     }
+});
+
+// Mount the router on /api
+app.use('/api', router);
+
+// Default route
+app.get('/', (req, res) => {
+    res.send('Portfolio Backend is running.');
 });
 
 const PORT = process.env.PORT || 3000;
