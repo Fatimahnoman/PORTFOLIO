@@ -13,23 +13,21 @@ const openai = new OpenAI({
 });
 
 module.exports = async (req, res) => {
-    // Manually handle preflight OPTIONS request
-    res.setHeader('Access-Control-Allow-Credentials', true);
+    // Explicitly set CORS headers for all responses
     res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
-    res.setHeader('Access-Control-Allow-Headers', 'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version, Authorization');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
 
+    // Handle preflight
     if (req.method === 'OPTIONS') {
         res.status(200).end();
         return;
     }
 
-    return new Promise((resolve, reject) => {
-        cors(req, res, async () => {
-            if (req.method !== 'POST') {
-                res.status(405).json({ error: 'Method Not Allowed' });
-                return resolve();
-            }
+    if (req.method !== 'POST') {
+        res.status(405).json({ error: 'Method Not Allowed' });
+        return;
+    }
 
             try {
                 const { messages } = req.body;
