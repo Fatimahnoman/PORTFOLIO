@@ -18,7 +18,11 @@ const openai = new OpenAI({
 const app = express();
 
 // Middleware
-app.use(cors());
+app.use(cors({
+    origin: 'https://fatimahnoman.github.io',
+    methods: ['GET', 'POST'],
+    credentials: true
+}));
 // Parse URL-encoded bodies (as sent by HTML forms)
 app.use(bodyParser.urlencoded({ extended: true }));
 // Parse JSON bodies (as sent by API clients)
