@@ -35,6 +35,7 @@ module.exports = async (req, res) => {
                 RULES:
                 - Use ONLY the provided portfolio data.
                 - Return JSON: {"answer": "...", "suggestions": ["...", "..."]}
+                - If the user talks in Roman Urdu/Hindi, respond in Roman Urdu/Hindi in a friendly, helpful way.
                 PORTFOLIO DATA: ${JSON.stringify(portfolioData)}`
         };
 
