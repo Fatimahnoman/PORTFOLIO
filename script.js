@@ -366,7 +366,7 @@ window.submitGuess = function(event) {
         chatMessages.scrollTop = chatMessages.scrollHeight;
 
         try {
-            const res = await fetch('https://portfolio-93ftou0sn-fatima-nomans-projects.vercel.app/api/chat', { 
+            const res = await fetch('/api/chat', { 
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({messages})
