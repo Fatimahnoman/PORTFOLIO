@@ -12,10 +12,10 @@ const openai = new OpenAI({
 });
 
 module.exports = async (req, res) => {
-    // 1. MUST handle OPTIONS immediately for CORS
+    // 1. Handle CORS preflight
     res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
     if (req.method === 'OPTIONS') {
         return res.status(200).end();
@@ -25,35 +25,17 @@ module.exports = async (req, res) => {
         return res.status(405).json({ error: 'Method Not Allowed' });
     }
 
+    // 2. Process POST request
     try {
         const { messages } = req.body;
         
         const systemPrompt = {
             role: "system",
-            content: `
-                You are Fatimah Noman's professional AI Recruitment Assistant. You are warm, friendly, intelligent, and highly conversational. You speak exactly like a human assistant, not a machine.
-
-                YOUR GOALS:
-                - Engage recruiters in a natural, professional human-like conversation.
-                - NEVER use report headers (like "Short explanation", "Technologies used", etc.).
-                - NEVER use bullet points unless specifically asked.
-                - Keep answers conversational, concise (2-5 sentences), and to the point.
-                - If you need to mention skills or projects, integrate them naturally into your sentences.
-                - Highlight Fatimah's expertise in Agentic AI and Full Stack development naturally in the flow of conversation.
-
+            content: `You are Fatimah Noman's professional AI Recruitment Assistant. You are warm, friendly, intelligent, and highly conversational. You speak exactly like a human assistant, not a machine.
                 RULES:
-                - Never make up information.
-                - Use ONLY the provided portfolio data below.
-                - If data is missing, say: "I'm sorry, I don't have information on that in Fatimah's portfolio. Would you like me to connect you with her directly via email?"
-                - MANDATORY: You must return the response in JSON format ONLY:
-                {
-                    "answer": "Your warm, conversational answer here (2-5 sentences, human-like, no headers).",
-                    "suggestions": ["Question 1", "Question 2", "Question 3", "Question 4"]
-                }
-
-                PORTFOLIO DATA:
-                ${JSON.stringify(portfolioData, null, 2)}
-            `
+                - Use ONLY the provided portfolio data.
+                - Return JSON: {"answer": "...", "suggestions": ["...", "..."]}
+                PORTFOLIO DATA: ${JSON.stringify(portfolioData)}`
         };
 
         const formattedMessages = [systemPrompt, ...messages.map(msg => ({
@@ -67,9 +49,7 @@ module.exports = async (req, res) => {
             response_format: { type: "json_object" }
         });
 
-        const rawContent = completion.choices[0].message.content;
-        const cleanedContent = rawContent.replace(/```json/g, '').replace(/```/g, '');
-        const responseObj = JSON.parse(cleanedContent);
+        const responseObj = JSON.parse(completion.choices[0].message.content);
         return res.status(200).json({ role: "model", content: responseObj.answer, suggestions: responseObj.suggestions });
     } catch (error) {
         console.error('Chat API Error:', error);
